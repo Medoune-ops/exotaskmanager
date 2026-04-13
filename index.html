@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Task Manager DOM</title>
+
+    <style>
+        .completed span {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .completed {
+            opacity: 0.6;
+            background-color: #d1fae5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="bg-indigo-200 p-4">
+        <div class="container flex justify-center">
+            <h1 class="text-6xl font-bold underline text-white">Task Manager</h1>
+        </div>
+    </section>
+
+    <div class="input-group py-6 flex justify-start m-4 px-110 gap-4 font-gris-400">
+        <input type="text" id="taskInput"
+            class="border-4 border-gray-200 rounded-full p-2"
+            placeholder="Ajouter une tâche...">
+
+        <button id="addBtn"
+            class="bg-gray-400 border-8 cursor-pointer p-4 bg-blue-500 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 rounded-4xl text-white">
+            Ajouter
+        </button>
+    </div>
+
+    <div>
+        <ul id="taskList" class="flex flex-wrap gap-4"></ul>
+    </div>
+
+    <div class="m-4">
+        <button id="sortBtn"
+            class="bg-green-500 text-white p-4 rounded-4xl hover:scale-110 transition">
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
