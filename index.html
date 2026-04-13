@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -43,10 +43,36 @@
 
     <div class="m-4">
         <button id="sortBtn"
-            class="bg-green-500 text-white p-4 rounded-4xl hover:scale-110 transition">
+            class="bg-green-500 text-white p-4 rounded-4xl hover:scale-110 transition"> Filtrer
         </button>
     </div>
 
     <script src="script.js"></script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Task Manager DOM</title>
+</head>
+<body>
+    <section class="bg-white-200 p-4 rounded-full shadow-2xl">
+    <div class="flex items-center w-full">
+        
+        <h1 class="text-6xl font-bold underline text-black">Task Manager</h1>
+        
+        <nav class="flex-1 flex justify-end  rounded-full shadow-2xl gap-4  ">
+             <ul class="flex gap-14 rounded-full shadow-2xl border-2 bg-gray-300">
+                <li><a href="#" class="hover:text-blue-500"><button id="Toutes">Toutes</button></a></li>
+                <li><a href="#" class="hover:text-blue-500"><button id="Completees">Complétées</button></a></li>
+                <li><a href="#" class="hover:text-blue-500"><button id="En-cours">En cours</button></a></li>
+             </ul>
+        </nav>
+        
+    </div>
+</section>
 </body>
 </html>
