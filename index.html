@@ -1,78 +1,39 @@
-<!-- <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Task Manager DOM</title>
-
-    <style>
-        .completed span {
-            text-decoration: line-through;
-            color: gray;
-        }
-
-        .completed {
-            opacity: 0.6;
-            background-color: #d1fae5;
-        }
-    </style>
-</head>
-
-<body>
-
-    <section class="bg-indigo-200 p-4">
-        <div class="container flex justify-center">
-            <h1 class="text-6xl font-bold underline text-white">Task Manager</h1>
-        </div>
-    </section>
-
-    <div class="input-group py-6 flex justify-start m-4 px-110 gap-4 font-gris-400">
-        <input type="text" id="taskInput"
-            class="border-4 border-gray-200 rounded-full p-2"
-            placeholder="Ajouter une tâche...">
-
-        <button id="addBtn"
-            class="bg-gray-400 border-8 cursor-pointer p-4 bg-blue-500 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 rounded-4xl text-white">
-            Ajouter
-        </button>
-    </div>
-
-    <div>
-        <ul id="taskList" class="flex flex-wrap gap-4"></ul>
-    </div>
-
-    <div class="m-4">
-        <button id="sortBtn"
-            class="bg-green-500 text-white p-4 rounded-4xl hover:scale-110 transition"> Filtrer
-        </button>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html> -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Task Manager DOM</title>
 </head>
-<body>
-    <section class="bg-white-200 p-4 rounded-full shadow-2xl">
+
+<body class="bg-gray-200">
+
+<section class="bg-gray-100 p-4 shadow-2xl">
     <div class="flex items-center w-full">
-        
-        <h1 class="text-6xl font-bold underline text-black">Task Manager</h1>
-        
-        <nav class="flex-1 flex justify-end  rounded-full shadow-2xl gap-4  ">
-             <ul class="flex gap-14 rounded-full shadow-2xl border-2 bg-gray-300">
-                <li><a href="#" class="hover:text-blue-500"><button id="Toutes">Toutes</button></a></li>
-                <li><a href="#" class="hover:text-blue-500"><button id="Completees">Complétées</button></a></li>
-                <li><a href="#" class="hover:text-blue-500"><button id="En-cours">En cours</button></a></li>
-             </ul>
+     <h1 class="text-4xl font-bold text-black">Task Manager</h1>
+      <nav class="flex-1 flex justify-end">
+        <ul class="flex gap-6 bg-white px-6 py-2 rounded-full shadow">
+        <li>
+         <button class="nav-btn active px-4 py-2 rounded-full transition duration-300">
+                        Toutes
+        </button>
+        </li>
+        <li>
+         <button class="nav-btn px-4 py-2 rounded-full transition duration-300">                 Complétées
+        </button>
+         </li>
+         <li>
+         <button class="nav-btn px-4 py-2 rounded-full transition duration-300">
+                        En cours
+         </button>
+        </li>
+            </ul>`
         </nav>
-        
     </div>
 </section>
+
+<script src="script.js"></script>
+
 </body>
 </html>
