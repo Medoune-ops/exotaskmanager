@@ -7,9 +7,9 @@
     <title>Task Manager DOM</title>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-gray-200 ">
 
-<section class="bg-gray-100 p-4 rounded-full shadow-2xl">
+<section class="bg-gray-100 p-4 rounded-md shadow-2xl">
     <div class="flex items-center w-full">
      <h1 class="text-4xl font-bold text-black">Task Manager</h1>
       <nav class="flex-1 flex justify-end">
@@ -37,9 +37,20 @@
         <input 
   type="text" 
   id="taskInput"
-  placeholder="Qu'y a-t-il à faire ?" 
+  placeholder="looy def ?" 
   class="w-full p-4 rounded-xl border-2 border-gray-400 outline-none focus:border-indigo-500 transition-all duration-300 shadow-sm">
-  <button class="mt-4 nav-btn px-139 bg-gray-300 border-2 py-2 rounded-full transition duration-300">Ajouter une tache</button>
+  <button id="addBtn" class="mt-4 nav-btn px-139 bg-gray-300 border-2 py-2 rounded-full transition duration-300"> + Ajouter une tache</button>
+    </div>
+</section>
+<section class="mt-8 bg-gray-50 p-4 rounded-md">
+    <div>
+<h2 class="text-2xl font-bold text-black">To do</h2>
+    </div>
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+        <table class="w-full text-left border-collapse">
+            <tbody id="taskList">
+            </tbody>
+        </table>
     </div>
 </section>
 
