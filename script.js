@@ -81,3 +81,31 @@ addBtn.addEventListener('click', () => {
 taskInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addBtn.click();
 });
+buttons.forEach(button => {
+button.addEventListener("click", () => {
+      const filterValue = button.innerText.trim();
+    const rows = taskList.querySelectorAll('tr');
+       rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge').innerText;
+        switch (filterValue) {
+                case 'Toutes':
+                    row.style.display = "";
+             break;
+               case 'Complétées':
+              if (statusBadge.includes("Complétée") || statusBadge.includes("✓")) {
+                        row.style.display = "";
+            } else {
+                        row.style.display = "none";
+                    }
+                    break;
+              case 'En cours':
+           if (statusBadge === "En cours") {
+                        row.style.display = "";
+                } else {
+                        row.style.display = "none";
+                    }
+                    break;
+            }
+        });
+    });
+});
