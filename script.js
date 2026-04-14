@@ -32,11 +32,11 @@ addBtn.addEventListener('click', () => {
         const badge = row.querySelector('.status-badge');
         const deleteBtn = row.querySelector('.delete-btn');
         const editBtn = row.querySelector('.edit-btn');
-        const taskTd = row.querySelector('.task-text'); // On cible le TD pour l'édition
+        const taskTd = row.querySelector('.task-text'); 
         badge.addEventListener('click', () => {
-            const span = taskTd.querySelector('span'); // On cherche le span actuel
+            const span = taskTd.querySelector('span'); 
             if (badge.innerText === "En cours") {
-                badge.innerText = "Complétée";
+                badge.innerHTML = `<span>✓</span> Complétée`;
                 badge.classList.replace("bg-yellow-100", "bg-green-100");
                 badge.classList.replace("text-yellow-700", "text-green-700");
                 if(span) span.classList.add("line-through", "text-gray-400");
