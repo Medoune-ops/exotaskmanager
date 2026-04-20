@@ -1,123 +1,153 @@
-const buttons = document.querySelectorAll(".nav-btn");
 const addBtn = document.getElementById('addBtn');
 const taskInput = document.getElementById('taskInput');
 const taskList = document.getElementById('taskList');
-function createTaskRow(text, isCompleted = false) {
+
+const supabaseUrl = 'https://oorrxmaqrzqnfqoeanol.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vcnJ4bWFxcnpxbmZxb2Vhbm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTU3NTEsImV4cCI6MjA5MTgzMTc1MX0.PniLnUVr2O4I2SqUh0JO3gLHb7OLrD4Xp1lNB3hONlg';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+window.signUp = signUp;
+window.signIn = signIn;
+window.signOut = signOut;
+
+
+async function signUp() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const { error } = await _supabase.auth.signUp({ email, password });
+    if (error) alert("Erreur: " + error.message);
+    else alert("Inscription réussie ! Vérifie tes mails.");
+}
+
+async function signIn() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    if (error) alert("Erreur: " + error.message);
+    else checkUser(); 
+}
+
+async function signOut() {
+    await _supabase.auth.signOut();
+    checkUser();
+}
+
+async function checkUser() {
+    const { data: { user } } = await _supabase.auth.getUser();
+    const authInterface = document.getElementById('auth-interface');
+    const appInterface = document.getElementById('app-interface');
+
+    if (user) {
+        authInterface.classList.add('hidden');
+        appInterface.classList.remove('hidden');
+        loadTasks();
+    } else {
+        authInterface.classList.remove('hidden');
+        appInterface.classList.add('hidden');
+        taskList.innerHTML = "";
+    }
+}
+
+
+function createTaskRow(text, isCompleted = false, id = null) {
     const row = document.createElement('tr');
     row.className = "border-b border-gray-100 hover:bg-gray-50 transition";
-        const badgeContent = isCompleted ? `<span>✓</span> Complétée` : "En cours";
+    
+    // Style du badge et du texte
+    const badgeText = isCompleted ? "✓ Complétée" : "En cours";
     const badgeColor = isCompleted ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700";
-    const textDecoration = isCompleted ? "line-through text-gray-400" : "";
+    const textDecoration = isCompleted ? "line-through text-gray-400" : "text-gray-800";
 
     row.innerHTML = `
-        <td class="p-4 text-gray-800 task-text">
+        <td class="p-4 task-text">
             <span class="${textDecoration}">${text}</span>
         </td>
         <td class="p-4 text-center">
             <span class="status-badge px-3 py-1 text-xs font-medium ${badgeColor} rounded-full cursor-pointer select-none">
-                ${badgeContent}
+                ${badgeText}
             </span>
         </td>
         <td class="p-4 text-right flex justify-end gap-2">
             <button class="edit-btn text-blue-500 hover:text-blue-700 font-medium transition cursor-pointer">Modifier</button>
             <button class="delete-btn text-red-500 hover:text-red-700 font-medium transition cursor-pointer px-4">Supprimer</button>
         </td>`;
-    const badge = row.querySelector('.status-badge');
-    const deleteBtn = row.querySelector('.delete-btn');
-    const editBtn = row.querySelector('.edit-btn');
-    const taskTd = row.querySelector('.task-text');
-badge.addEventListener('click', () => {
-const span = taskTd.querySelector('span');
-        if (badge.innerText.includes("En cours")) {
-            badge.innerHTML = `<span>✓</span> Complétée`;
-            badge.classList.replace("bg-yellow-100", "bg-green-100");
-            badge.classList.replace("text-yellow-700", "text-green-700");
-            if(span) span.classList.add("line-through", "text-gray-400");
-        } else {
-            badge.innerText = "En cours";
-            badge.classList.replace("bg-green-100", "bg-yellow-100");
-            badge.classList.replace("text-green-700", "text-yellow-700");
-            if(span) span.classList.remove("line-through", "text-gray-400");
-        }
-        saveTasks(); 
+
+    row.querySelector('.status-badge').addEventListener('click', async () => {
+        const { error } = await _supabase
+            .from('test_table')
+            .update({ is_completed: !isCompleted }) 
+            .eq('id', id);
+
+        if (!error) loadTasks(); 
     });
-    deleteBtn.addEventListener('click', () => {
-        row.remove();
-        saveTasks(); 
-    });
-editBtn.addEventListener('click', () => {
-        if (editBtn.innerText === "Modifier") {
-const currentSpan = taskTd.querySelector('span');
-const currentText = currentSpan ? currentSpan.innerText : "";
-            taskTd.innerHTML = `<input type="text" class="edit-input border-b-2 border-blue-500 outline-none w-full bg-transparent" value="${currentText}">`;
- const inputField = taskTd.querySelector('.edit-input');
-            inputField.focus();
-            inputField.addEventListener('keypress', (e) => { if (e.key === 'Enter') editBtn.click(); });
-            editBtn.innerText = "Enregistrer";
-            editBtn.classList.replace("text-blue-500", "text-green-600");
-        } else {
-const inputField = taskTd.querySelector('.edit-input');
-const newText = inputField.value.trim();
-            if (newText !== "") {
-                taskTd.innerHTML = `<span>${newText}</span>`;
-                editBtn.innerText = "Modifier";
-                editBtn.classList.replace("text-green-600", "text-blue-500");
-                saveTasks(); 
-            }
+
+    row.querySelector('.edit-btn').addEventListener('click', async () => {
+        const nouveauNom = prompt("Modifier la tâche :", text);
+        if (nouveauNom && nouveauNom.trim() !== "" && nouveauNom !== text) {
+            const { error } = await _supabase
+                .from('test_table')
+                .update({ name: nouveauNom })
+                .eq('id', id);
+            
+            if (!error) loadTasks();
         }
+    });
+
+    row.querySelector('.delete-btn').addEventListener('click', async () => {
+        const { error } = await _supabase
+            .from('test_table')
+            .delete()
+            .eq('id', id);
+        
+        if (!error) row.remove();
     });
 
     taskList.appendChild(row);
 }
-buttons.forEach(button => {
-    button.classList.add("hover:bg-blue-500", "hover:text-white");
-    button.addEventListener("click", () => {
-     buttons.forEach(btn => btn.classList.remove("bg-blue-500", "text-white", "active"));
-     button.classList.add("bg-blue-500", "text-white", "active");
 
-const filterValue = button.innerText.trim();
-      const rows = taskList.querySelectorAll('tr');
-        rows.forEach(row => {
-const statusBadge = row.querySelector('.status-badge').innerText;
-            if (filterValue === 'Toutes') row.style.display = "";
- else if (filterValue === 'Complétées') row.style.display = (statusBadge.includes("Complétée") || statusBadge.includes("✓")) ? "" : "none";
- else if (filterValue === 'En cours') row.style.display = (statusBadge === "En cours") ? "" : "none";
+async function loadTasks(filter = 'all') {
+    let query = _supabase
+        .from('test_table')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (filter === 'completed') query = query.eq('is_completed', true);
+    if (filter === 'todo') query = query.eq('is_completed', false);
+
+    const { data, error } = await query;
+
+    if (!error) {
+        taskList.innerHTML = ""; 
+        data.forEach(task => {
+            createTaskRow(task.name, task.is_completed, task.id);
         });
-    });
-});
-addBtn.addEventListener('click', () => {
+    }
+}
+
+addBtn.addEventListener('click', async () => {
     const taskText = taskInput.value.trim();
     if (taskText !== "") {
-        createTaskRow(taskText);
-        saveTasks(); 
-        taskInput.value = "";
-    }
-});
-taskInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addBtn.click();
-});
-function saveTasks() {
-    const tasks = [];
-    const rows = document.querySelectorAll('#taskList tr');
-    rows.forEach(row => {
- const span = row.querySelector('.task-text span');
-    const badge = row.querySelector('.status-badge');
-     if (span) {
-       tasks.push({
-       text: span.innerText,
-      completed: badge.innerText.includes("Complétée")
-            });
+        const { error } = await _supabase
+            .from('test_table')
+            .insert([{ name: taskText }]); 
+
+        if (error) alert("Erreur : " + error.message);
+        else {
+            loadTasks();
+            taskInput.value = "";
         }
-    });
-    localStorage.setItem('myTasks', JSON.stringify(tasks));
-}
-function loadTasks() {
-    const savedTasks = localStorage.getItem('myTasks');
-    if (savedTasks) {
- const tasks = JSON.parse(savedTasks);
-   tasks.forEach(task => {
-      createTaskRow(task.text, task.completed);
-        });
     }
-}
-loadTasks();
+});
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const filterType = e.currentTarget.getAttribute('data-filter');
+        loadTasks(filterType);
+
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('bg-gray-300', 'font-bold'));
+        e.currentTarget.classList.add('bg-gray-300', 'font-bold');
+    });
+});
+
+checkUser();
